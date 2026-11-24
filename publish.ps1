@@ -1,5 +1,5 @@
 <#
-  Publish a new version of the PLM Bootcamp deck to GitHub Pages.
+  Publish a new version of the PLM Quick Start deck to GitHub Pages.
 
   Publishes the FUNDAMENTALS deck only. The Advanced deck lives in its own
   repo folder (plm-bootcamp-advanced) with its own copy of this script.
@@ -11,7 +11,7 @@
 
   What it does, in order:
     1. Finds the deck HTML to publish
-    2. Copies it over index.html, re-applying the "PLM Bootcamp - Fundamentals" title
+    2. Copies it over index.html, re-applying the "PLM Quick Start" title
        (a fresh export from source would otherwise revert the title)
     3. Commits and pushes; GitHub Pages rebuilds automatically
 #>
@@ -20,8 +20,8 @@
 param(
     [string]$SourceFile = "",
     [string]$Message    = "",
-    [string]$SourceDir  = "C:\Users\yooy\OneDrive - Autodesk\Fusion Manage\Enablement materials\PLM BOOTCAMP",
-    [string]$SourceName = "PLM Technical Bootcamp - Fundamentals.html",
+    [string]$SourceDir  = "",
+    [string]$SourceName = "",
     [string]$Notes      = "",
     [switch]$NoBump,
     [switch]$NoRelease
@@ -29,8 +29,8 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $RepoDir  = $PSScriptRoot
-$LiveUrl  = "https://yjyoo122.github.io/plm-bootcamp-fundamentals/"
-$RepoSlug      = "yjyoo122/plm-bootcamp-fundamentals"
+$LiveUrl  = "https://mattzielke-autodesk.github.io/plm-quickstart/"
+$RepoSlug      = "mattzielke-autodesk/plm-quickstart"
 $VersionFile   = Join-Path $RepoDir 'VERSION'
 $ChangelogFile = Join-Path $RepoDir 'CHANGELOG.md'
 $ChangelogMark = '<!-- newest first -->'
@@ -43,8 +43,8 @@ if (Test-Path -LiteralPath $VersionFile) {
 }
 
 # --- the title applied on every publish. Change these two lines to retitle the deck. ---
-$TabTitle     = "PLM Bootcamp - Fundamentals"
-$CoverHeading = "<h1>PLM Bootcamp<br>Fundamentals</h1>"
+$TabTitle     = "PLM Quick Start"
+$CoverHeading = "<h1>PLM<br>Quick Start</h1>"
 
 function Say  ($m) { Write-Host $m }
 function Good ($m) { Write-Host "  OK    $m" -ForegroundColor Green }
@@ -52,12 +52,12 @@ function Warn ($m) { Write-Host "  WARN  $m" -ForegroundColor Yellow }
 function Die  ($m) { Write-Host ""; Write-Host "  STOP  $m" -ForegroundColor Red; Write-Host ""; exit 1 }
 
 Say ""
-Say "=== Publish PLM Bootcamp deck ==="
+Say "=== Publish PLM Quick Start deck ==="
 Say ""
 
 # ---------------------------------------------------------------- 1. find the source
 if ([string]::IsNullOrWhiteSpace($SourceFile)) {
-    if (-not (Test-Path $SourceDir)) {
+    if ([string]::IsNullOrWhiteSpace($SourceDir) -or -not (Test-Path $SourceDir)) {
         Die "Source folder not found:`n        $SourceDir`n`n        Drag the .html file onto 'Publish deck.bat' instead."
     }
     # Pinned to one filename on purpose. Picking "newest .html in the folder" would
@@ -98,7 +98,7 @@ $html  = [System.Text.Encoding]::UTF8.GetString($bytes)
 $titleHits = ([regex]'<title>.*?</title>').Matches($html).Count
 $html = [regex]::Replace($html, '<title>.*?</title>', "<title>$TabTitle</title>")
 
-$coverPattern = '<h1>PLM (?:Technical<br>Bootcamp|Bootcamp<br>Fundamentals)</h1>'
+$coverPattern = '<h1>PLM(?: Technical)?<br>(?:Bootcamp|Fundamentals|Quick Start)</h1>'
 $coverHits = ([regex]$coverPattern).Matches($html).Count
 $html = [regex]::Replace($html, $coverPattern, $CoverHeading)
 
@@ -106,7 +106,7 @@ if ($titleHits -eq 0) { Warn "No <title> tag found - browser tab title not set."
 else                  { Good "Tab title set to '$TabTitle'" }
 
 if ($coverHits -eq 0) { Warn "Cover heading pattern not found - check the cover slide title yourself." }
-else                  { Good "Cover heading set to 'PLM Bootcamp / Fundamentals'" }
+else                  { Good "Cover heading set to 'PLM / Quick Start'" }
 
 # UTF8Encoding($false) = no byte-order mark, so the file stays byte-faithful
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)

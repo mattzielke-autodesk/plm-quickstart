@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PLM Quick Start - Items &amp; BOMs</title>
+<title>PLM Quick Start</title>
 <style>
 /* Autodesk Brand Hub — Black #000 · White #FFF · Hello Yellow #FF0
    Warm Slate #D5D5CB · Slate #666 · tertiary FUNCTIONAL ONLY:
@@ -27,6 +27,8 @@ h1,h2,h3,.kick,.pg,.rail b{font-family:var(--disp)}
   padding:0 14px;background:rgba(0,0,0,.95);border-bottom:1px solid var(--line);z-index:90}
 #brand{font-family:var(--disp);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--warm)}
 #brand b{color:var(--yellow)}
+#edb{display:none;font-family:var(--disp);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;padding:5px 11px;border-radius:99px;border:1px solid var(--warm);color:var(--warm);white-space:nowrap;margin-right:4px}
+#edb[data-k="s"]{border-color:var(--dawn);color:var(--dawn)}#edb[data-k="c"]{border-color:var(--yellow);color:var(--yellow)}#edb[data-k="b"]{border-color:var(--mo);color:var(--mo)}
 #crumb{font-size:13px;color:var(--warm);flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .btn{background:transparent;border:1px solid var(--line);color:var(--warm);font:inherit;font-size:13px;
   padding:7px 13px;border-radius:99px;cursor:pointer;white-space:nowrap}
@@ -286,8 +288,8 @@ body.explore #explore{display:block}
 <div id="top">
   <button class="btn ic" id="menu" title="Chapters">☰</button>
   <button class="btn ic" id="home" title="Back to cover">⌂</button>
-  <div id="brand">Fusion Manage · <b>Fusion connected</b></div>
-  <div id="crumb"></div><div class="pg" id="pg"></div>
+  <div id="brand">Fusion Manage · <b>Quick Start</b></div>
+  <div id="crumb"></div><span id="edb"></span><div class="pg" id="pg"></div>
   <button class="btn" id="prev">←</button><button class="btn" id="next">→</button>
   <button class="btn" id="pbtn">Notes</button><button class="btn mode" id="advb" title="Basic / Advanced">Basic</button><button class="btn mode on" id="mode">Present</button>
   <button class="btn ic" id="hbtn" title="Shortcuts">?</button><button class="btn ic" id="fs">⛶</button>
@@ -1283,28 +1285,38 @@ function figWsList(){
 
 /* ===== QUICK START · ITEMS & BOMS FIGURES ===== */
 function qsWrap(s,x,y,lines,col,size,gap){lines.forEach(function(t,i){s.v+=lab(x,y+i*(gap||24),t,col,size||17,'start',0);});}
-/* the six-step implementation framework; hi = steps that glow */
+/* the four-step framework; hi = steps that glow */
 function figQSFrame(hi){
   const S=[
-    ["01","ALIGNMENT","WEEK 1–2",["Stakeholder meetings","Assign project and","department owners","Prioritize business needs","Process-mapping","Co-build and agree on","the project plan"]],
-    ["02","CONFIGURATION","WEEK 3",["Adjust out-of-the-box","configuration","Initial setup: users,","roles, permissions,","workspaces, custom","fields"]],
-    ["03","UAT","WEEK 4",["UAT for system","configuration"]],
-    ["04","TRAINING","WEEK 5–8",["Training program","development","End-user training","Administrator training"]],
-    ["05","GO-LIVE","WEEK 8",["Sandbox UAT","UAT on a real project;","measure KPIs","Go live with the","phase’s use cases"]],
-    ["06","CUSTOMER SUCCESS","AFTER GO-LIVE",["Solution roadmap","build-out","Post-rollout support"]]];
-  const cw=222,gap=18,x0=14;let s='';
-  S.forEach(function(v,i){const x=x0+i*(cw+gap),n=i+1,on=hi.indexOf(n)>=0,inScope=n>=2&&n<=5;
-    const col=on?C.y:(inScope?"#5A5A5A":"#3A3A3A"),tc=on?C.y:(inScope?C.warm:"#6A6A6A");
-    s+='<rect x="'+x+'" y="26" width="'+cw+'" height="372" fill="'+(on?'rgba(255,255,0,.07)':'none')+'" stroke="'+col+'" stroke-width="'+(on?5:2.5)+'"'+(inScope?'':' stroke-dasharray="8 7"')+'/>';
-    s+=lab(x+16,72,v[0],on?C.y:C.slate,26,'start',1);
-    s+=lab(x+16,108,v[1],tc,v[1].length>12?16:22,'start',.6);
-    s+=lab(x+16,134,v[2],on?C.w:C.slate,13,'start',1.4);
-    v[3].forEach(function(t,k){s+=lab(x+16,176+k*29,t,on?C.w:(inScope?C.warm:"#6A6A6A"),16,'start',0);});});
-  s+='<path d="M'+(x0+1*(cw+gap))+' 428 H'+(x0+4*(cw+gap)-gap)+'" stroke="'+C.y+'" stroke-width="5"/>';
-  s+=lab(x0+(1*(cw+gap)+4*(cw+gap)-gap)/2,462,"THIS MODULE · FROM CONFIGURATION THROUGH GO-LIVE",C.y,19);
-  s+=lab(x0+cw/2,462,"SPECIALIZED PARTNER",C.slate,15);
-  s+=lab(x0+5*(cw+gap)+cw/2,462,"SPECIALIZED PARTNER",C.slate,15);
-  return '<svg viewBox="0 0 1440 490">'+s+'</svg>';}
+    ["01","CONFIGURE",["Adjust the out-of-the-box","setup","Users, roles, permissions","Workspaces, custom fields","Import your BOMs","BOM views and reports"]],
+    ["02","TEST IT",["User acceptance testing","(UAT)","Test in a sandbox","Test on a real project","and measure your KPIs"]],
+    ["03","TRAIN",["Build your training","program","Train end users","Train administrators"]],
+    ["04","GO LIVE",["Go live with this phase’s","use cases and","functionality"]]];
+  const cw=330,gap=24,x0=20;let s='';
+  S.forEach(function(v,i){const x=x0+i*(cw+gap),n=i+1,on=hi.indexOf(n)>=0,inScope=n<=2;
+    const col=on?C.y:(inScope?"#6A6A6A":"#3A3A3A"),tc=on?C.y:(inScope?C.warm:"#7A7A7A");
+    s+='<rect x="'+x+'" y="26" width="'+cw+'" height="352" fill="'+(on?'rgba(255,255,0,.07)':'none')+'" stroke="'+col+'" stroke-width="'+(on?5:2.5)+'"'+(inScope?'':' stroke-dasharray="8 7"')+'/>';
+    s+=lab(x+22,76,v[0],on?C.y:C.slate,28,'start',1);
+    s+=lab(x+22,118,v[1],tc,28,'start',.6);
+    v[2].forEach(function(t,k){s+=lab(x+22,166+k*31,t,on?C.w:(inScope?C.warm:"#7A7A7A"),19,'start',0);});
+    if(i<3)s+=arw(x+cw+2,200,x+cw+gap-2,"#5A5A5A",3);});
+  s+='<path d="M'+x0+' 412 H'+(x0+2*(cw+gap)-gap)+'" stroke="'+C.y+'" stroke-width="5"/>';
+  s+=lab(x0+(2*(cw+gap)-gap)/2,448,"THIS CHAPTER · CONFIGURE AND TEST",C.y,21);
+  s+=lab(x0+2*(cw+gap)+(2*(cw+gap)-gap)/2,448,"THEN · TRAIN YOUR TEAM AND GO LIVE",C.slate,19);
+  return '<svg viewBox="0 0 1440 476">'+s+'</svg>';}
+/* Items & BOMs is the left-hand (standalone) case of the two-editions picture */
+function figQSEdition(){
+  const dim="#4A4A4A";
+  let s=box(120,20,470,84,"ERP","",C.warm)+box(880,20,470,84,"ERP","",dim)
+  +box(120,180,470,110,"Fusion Manage","STANDALONE",C.y,6)+box(880,180,470,110,"Fusion Manage","FUSION CONNECTED",dim)
+  +box(120,366,470,110,"Vault or other PDM","YOUR ITEMS AND BOMS COME FROM HERE",C.dawn)+box(880,366,470,110,"Fusion","CLOUD DESIGN DATA",dim)
+  +box(120,552,470,84,"Inventor · SWX · Creo · Catia","",C.warm);
+  s+=vlink(355,104,180,C.warm,true)+vlink(355,290,366,C.y,true)+vlink(355,476,552,C.warm,true)
+    +vlink(1115,104,180,dim,true)+vlink(1115,290,366,dim,true);
+  s+=lab(735,255,"≠",C.w,96);
+  s+='<rect x="600" y="318" width="250" height="56" fill="'+C.y+'"/>'+lab(725,355,"THIS CHAPTER","#000",24);
+  s+=lab(1115,540,"SEE THE FUSION ↔ MANAGE CHAPTER",dim,20)+lab(1115,568,"FOR THIS ROUTE",dim,20);
+  return '<svg viewBox="0 0 1440 650">'+s+'</svg>';}
 /* the four configuration moves; hi 0..3 = active, 4 = all done */
 function figQSArc(hi){
   const n=[["REVIEW AND UPDATE","the workspaces"],["ADD USERS","and assign to groups"],["IMPORT DATA","the customer’s BOMs"],["REPORTS AND","BOM views"]];let s='';
@@ -1314,15 +1326,15 @@ function figQSArc(hi){
     s+=lab(x,142,v[0],on?C.y:(done?C.mo:C.warm),26)+lab(x,176,v[1],on?C.w:C.warm,19);
     if(done)s+='<g transform="translate('+(x+128)+',92)"><circle r="17" fill="'+C.mo+'"/>'+lab(0,8,"✓","#000",22)+'</g>';
     if(i<3)s+=arw(x+166,135,x+355-166,hi>i?C.mo:"#5A5A5A");});
-  return '<svg viewBox="0 0 1440 290">'+s+lab(720,262,hi===4?"CONFIGURATION COMPLETE — NEXT, PROVE IT WORKS":"CONFIGURING THE PLM TENANT · STEP 02 OF THE FRAMEWORK",hi===4?C.mo:C.warm,23)+'</svg>';}
+  return '<svg viewBox="0 0 1440 290">'+s+lab(720,262,hi===4?"CONFIGURATION COMPLETE — NEXT, PROVE IT WORKS":"CONFIGURING THE PLM TENANT · STEP 01 OF THE FRAMEWORK",hi===4?C.mo:C.warm,23)+'</svg>';}
 /* the three things to have in hand */
 function figQSPrep(){
   const B=[["1","The Workbook","with the fictional Acme Anvil example",C.y],["2","The Template","the Items & BOMs Quick Start template",C.y],["3","A training tenant","the latest out-of-the-box tenant",C.mo]];let s='';
   B.forEach(function(v,i){const x=70+i*470;
     s+='<rect x="'+x+'" y="40" width="430" height="190" fill="none" stroke="'+v[3]+'" stroke-width="4"/>'
       +lab(x+215,96,v[0],v[3],28)+lab(x+215,148,v[1],C.w,34)+lab(x+215,190,v[2].replace('&','&amp;'),C.warm,19);});
-  s+='<rect x="70" y="284" width="1330" height="96" fill="'+C.y+'"/>'+lab(735,326,"FOLLOW ALONG WITH ACME ANVIL COMPANY — OR YOUR OWN CUSTOMER","#000",30)
-    +lab(735,360,"in a real engagement the alignment meetings have already happened, and this is what they produced","#000",18);
+  s+='<rect x="70" y="284" width="1330" height="96" fill="'+C.y+'"/>'+lab(735,326,"FOLLOW ALONG WITH ACME ANVIL COMPANY — OR YOUR OWN DATA","#000",30)
+    +lab(735,360,"start with the BOMs you work on today, so each step is real","#000",18);
   return '<svg viewBox="0 0 1470 410">'+s+'</svg>';}
 /* generic columns of rows: cols=[{h,col,items:[]}] */
 function figQSCols(cols,cap,size){
@@ -1372,7 +1384,7 @@ function qsExercise(title,sub){
   return '<svg viewBox="0 0 1200 300" style="width:min(100%,1100px)"><rect x="40" y="30" width="1120" height="240" fill="none" stroke="'+C.y+'" stroke-width="5"/>'
     +'<rect x="40" y="30" width="250" height="52" fill="'+C.y+'"/>'+lab(165,66,"YOUR TURN","#000",24,'middle',2)
     +lab(600,152,title,C.w,38)+lab(600,206,sub,C.warm,22)+'</svg>';}
-const QSFIG={qsframe0:()=>figQSFrame([2,3,4,5]),qsframeCfg:()=>figQSFrame([2]),qsframeUAT:()=>figQSFrame([3]),
+const QSFIG={qsframe0:()=>figQSFrame([1,2]),qsframeCfg:()=>figQSFrame([1]),qsframeUAT:()=>figQSFrame([2]),qsedition:figQSEdition,
   qsarc0:()=>figQSArc(0),qsarc1:()=>figQSArc(1),qsarc2:()=>figQSArc(2),qsarc3:()=>figQSArc(3),qsarc4:()=>figQSArc(4),
   qsprep:figQSPrep,
   qscap:()=>figQSCols([{h:"BUILD AND COMPARE",col:C.y,items:["Tailor BOMs to different stages\nin the process","Compare BOMs for a more complete,\naccurate picture","Preserve BOM integrity\nand traceability","Share, review and update\nBOMs across teams"]},
@@ -1391,7 +1403,7 @@ const QSFIG={qsframe0:()=>figQSFrame([2,3,4,5]),qsframeCfg:()=>figQSFrame([2]),q
     ["Company project lead","Admin Group · Engineering"],["Engineer / Design","Engineering"],["PLM Admin","Admin Group · Administration [SYSTEM] · Engineering"],["Importer","Engineering · Importer"],["Others","Manufacturing"]],
     [20,560],"RECOMMENDED GROUP ASSIGNMENTS FOR AN ITEMS & BOMS QUICK START".replace('&','&amp;')),
   qsuat:figQSUAT,
-  qsverify:()=>figQSChecks([["Verify the BOM was imported correctly","with its metadata"],["Verify the BOM views and charts","show what the customer expects"]],"FOUNDATIONAL MODULE, SO THE TEST IS SIMPLE — FUTURE MODULES GET A FULLER TEST PLAN"),
+  qsverify:()=>figQSChecks([["Verify the BOM was imported correctly","with its metadata"],["Verify the BOM views and charts","show what the customer expects"]],"A FOUNDATIONAL CHAPTER, SO THE TEST IS SIMPLE — LATER ONES GET A FULLER PLAN"),
   qsmap:()=>figMap("PRODUCT DEVELOPMENT")};
 
 const FIG=Object.assign({},QSFIG,{rel:figRel,groups:figGroups,line:figLine,result:figResult,point:figPoint,two:figTwo,prereq:figPrereq,
@@ -1653,7 +1665,7 @@ more:[
   notes:[["This is the to-do list","Items assigned or delegated to you in a workflow."],
          ["Back to the hub","The Projects pill at the top jumps to Fusion Hub.","q"]]}
 ]},
-{id:"connect",nav:"Fusion ↔ Manage",lit:["why","two","map","access","connect"],steps:CONSTEPS,screens:[
+{id:"connect",nav:"Fusion ↔ Manage",badge:"Fusion connected",lit:["why","two","map","access","connect"],steps:CONSTEPS,screens:[
  {kind:"sect",t:"FUSION ↔ MANAGE",sub:"Four moves from an open design to a governed PLM record, without leaving Fusion."},
  {kind:"fig",fig:"connect",kick:"The flow",h1:"Four moves, and<br>the design is in PLM.",step:0,
   say:"Before any clicking — this is the whole shape of it. Open a design, give it an item number, release it, then work it in Fusion Manage. Four moves. Everything else is detail.",
@@ -1713,149 +1725,148 @@ more:[
          ["Real-time sync","Change the BOM either side and it appears on the other. No publish, no import."],
          ["The View tab","Inherits the view file — purchasing, quality and suppliers see the part without a CAD licence."]]}
 ]},
-{id:"items",nav:"Items & BOMs",lit:["why","two","map","access","connect","items"],steps:ITEMSTEPS,screens:[
- {kind:"sect",t:"ITEMS & BOMS",sub:"The first Quick Start. Get a customer’s items and bills of materials into Fusion Manage—configured, populated and verified."},
- {kind:"fig",fig:"qsframe0",step:1,kick:"The framework",h1:"Five steps. This module runs<br>from configuration to go-live.",
-  sub:"Alignment comes before it and customer success after. The same arc repeats for every Quick Start module.",
-  say:"Every Quick Start follows the same framework: alignment, configuration, UAT, training, go-live, then customer success. Items and BOMs is the foundation module, built from out-of-the-box capability so the customer gets value fast while the groundwork is laid for what comes next. We start at step two and finish after the go-live part of step five.",
-  note:"Steps one and six sit in the Specialized PLM Partner training, so this module does not cover them. The source slide calls this a 30-day implementation cycle, while the framework shows weeks one to eight. Pick one framing and use it consistently when you present. Pair this Quick Start with Change Management—together they give the customer measurable results."},
+{id:"items",nav:"Items & BOMs",badge:"Standalone",notelabel:"Tip",lit:["why","two","map","access","connect","items"],steps:ITEMSTEPS,screens:[
+ {kind:"sect",t:"ITEMS & BOMS",sub:"For Fusion Manage standalone. Get your items and bills of materials in, set up and checked—by you, step by step."},
+ {kind:"fig",fig:"qsedition",step:1,kick:"Who this is for",h1:"Items & BOMs is the<br>standalone starting point",
+  sub:"If your design data lives in Vault, another PDM or spreadsheets, you bring items and BOMs into Fusion Manage by import. That is what this chapter teaches.",
+  say:"Look back at the two Fusion Manages. This chapter is for the one on the left: Fusion Manage standalone, sitting between your ERP and a PDM such as Vault. Your items and bills of materials come in by import, and you set up how they look and who can see them. If you run Fusion connected, your designs feed Manage directly, and the Fusion ↔ Manage chapter you just saw is your route.",
+  note:"Using both? Do this chapter for any data that does not come from Fusion designs. The chapters after this one—Change management, Quality, Ideas and Documents—work in both editions."},
+ {kind:"fig",fig:"qsframe0",step:1,kick:"The framework",h1:"Four steps to value.<br>You can do them yourself.",
+  sub:"Configure, test, train, go live. This chapter takes you through configure and test.",
+  say:"The fast path to value has four steps: configure Fusion Manage for how you work, test it, train your team, and go live. You will do the first two here, using out-of-the-box capability, so you get value quickly and lay the groundwork for what you add later. Change management is the natural next step after it."},
  {kind:"fig",fig:"qsprep",step:1,kick:"Before you start",h1:"Set yourself up for success",
-  sub:"Have the Workbook, the Template and a clean training tenant ready. You follow one example from start to finish.",
-  say:"Three things before we start. Download the Workbook and the Template. Then use a fresh training tenant—the latest out-of-the-box tenant a new customer would receive—so what you see matches what they will see. We follow a fictional customer, Acme Anvil Company, but you are welcome to use a real customer instead.",
-  note:"The Workbook and Template download links still need to be added to this screen. In a real engagement the alignment work has already happened: stakeholders met, owners named, processes mapped, the plan agreed. The Workbook lists Acme Anvil’s answers so the exercise can start straight away."},
- {kind:"fig",fig:"qscap",step:2,kick:"Value proposition",h1:"What an imported BOM<br>lets the customer do",
-  sub:"Cloud PLM extends the value of their data—bridging design, engineering and manufacturing in one centralized system.",
-  say:"This is the pitch for the module. Tailor BOMs to each stage of the process, compare them, keep integrity and traceability, and share, review and update across teams. Then the control side: personalized views, lifecycle status, quick and accurate change, and the foundation for automated CAD integration and third-party access later.",
-  note:"Keep this to a minute. The customer has already agreed to this in alignment; it is here so the implementer can repeat the value in the customer’s own words at UAT."},
+  sub:"Have the Workbook, the Template and a training tenant ready. You follow one example from start to finish.",
+  say:"Three things before you begin. Download the Workbook and the Template. Then use a training tenant—the latest out-of-the-box tenant a new customer would receive—so what you see matches what we show you. You can follow our fictional customer, Acme Anvil Company, or use your own items and BOMs.",
+  note:"The Workbook and Template download links still need to be added to this screen. Decide up front which BOMs matter most to you; you will need one to import later. Your Autodesk contact can arrange a training tenant."},
+ {kind:"fig",fig:"qscap",step:2,kick:"Value proposition",h1:"What an imported BOM<br>lets you do",
+  sub:"Cloud PLM extends the value of your data—bridging design, engineering and manufacturing in one centralized system.",
+  say:"Here is what you get. Tailor BOMs to each stage of your process, compare them, keep integrity and traceability, and share, review and update across teams. Then control: personalized views, lifecycle status, quick and accurate change, and the foundation for automated CAD integration and third-party access later."},
  {kind:"fig",fig:"qsval",step:2,kick:"Value proposition",h1:"Outcomes, industries,<br>who benefits",
-  say:"The outcomes are agility, less non-value-add work, fewer errors and rework, fewer defects and non-conformities, and a faster time to market. It fits automotive and transportation, building products, consumer products, industrial machinery and medical device. And it reaches well beyond engineering: executives, procurement and supply chain, R&D, and quality all benefit.",
-  note:"Pick the industry and the persona that match your customer and name them out loud. The rest can stay on screen."},
- {kind:"fig",fig:"qskpi",step:2,kick:"Use cases and KPIs",h1:"Measuring a successful<br>implementation",
-  sub:"Importing and viewing a BOM is the first step on the PLM journey. It goes hand in hand with the Change Management Quick Start.",
-  say:"There are no workflows when you only import and view a BOM, so success is measured simply. Was the BOM imported, with all its metadata? Can the right users open it and see its views, as set up? And can they see the relevant reports on their My Outstanding Work page? Those three checks are what we prove at UAT.",
-  note:"This implementation deliberately has no workflow. Change management is the next chapter of this deck and a separate Quick Start in the learning course. Do not let the customer expect approvals from this module alone."},
+  say:"The outcomes are agility, less non-value-add work, fewer errors and rework, fewer defects and non-conformities, and a faster time to market. It fits automotive and transportation, building products, consumer products, industrial machinery and medical device. And it reaches beyond engineering: executives, procurement and supply chain, R&D, and quality all benefit."},
+ {kind:"fig",fig:"qskpi",step:2,kick:"Use cases and KPIs",h1:"How you will know<br>it worked",
+  sub:"Importing and viewing a BOM is the first step on the PLM journey. It goes hand in hand with change management, which is the next chapter.",
+  say:"There are no workflows when you only import and view a BOM, so success is simple. Was the BOM imported, with all its metadata? Can the right people open it and see its views, as you set them up? And can they see the relevant reports on their My Outstanding Work page? You will check all three at the end.",
+  note:"This chapter deliberately has no workflow. Approvals arrive with change management, the chapter that follows."},
 
- {kind:"fig",fig:"qsframeCfg",step:3,kick:"Back to the framework",h1:"Now the configuration<br>(step 02)",
-  sub:"Four moves: review the workspaces, add users, import the data, then set up reports and BOM views.",
-  say:"Step two is configuration. Four moves, in this order: review and update the workspaces, add users and assign them to groups, import the customer data, and finish with reports and BOM views."},
+ {kind:"fig",fig:"qsframeCfg",step:3,kick:"Back to the framework",h1:"Step 01:<br>configure",
+  sub:"Four moves: review the workspaces, add users, import your data, then set up reports and BOM views.",
+  say:"Configuration is four moves, in this order: review and update the workspaces, add users and assign them to groups, import your data, and finish with reports and BOM views."},
  {kind:"fig",fig:"qsarc0",step:3,kick:"Configuring the PLM tenant",h1:"Move one:<br>review the workspaces",
-  say:"First, the workspaces. We make sure the Items and BOM workspace is set up the way this customer will work."},
+  say:"First, the workspaces. You make sure the Items and BOM workspace is set up the way you will work."},
  {kind:"fig",fig:"qsmap",step:3,kick:"Out of the box",h1:"Items and BOMs live in<br>Product Development",
   sub:"Items & Bill of Materials sits in the Product Development group, next to Documents and Design Reviews.",
-  say:"Look back at the standard workspaces in the template tenant. Managing items and BOMs belongs to the Product Development group, which also holds Documents, Design Reviews and Design Review Tasks. The workspace we need to configure is Items.",
-  note:"Items & Bill of Materials is the first row in the lit group. Design Reviews and Design Review Tasks are covered in a later Quick Start phase."},
+  say:"Look back at the standard workspaces in the template tenant. Managing items and BOMs belongs to the Product Development group, which also holds Documents, Design Reviews and Design Review Tasks. The workspace you configure is Items.",
+  note:"Design Reviews and Design Review Tasks are not part of this chapter."},
  {kind:"step",step:3,kick:"Workspace manager",h2:"Open the Items workspace in Workspace Manager",img:"qs_wsmgr",
   path:["Administration","Workspace Manager","Items"],
   cals:[{t:"Expand the Items workspace",b:"Scroll down in Workspace Manager and expand Items. It is a revision controlled workspace, and each managed tab has its own link."},
-        {t:"One link per tab",b:"We go through the tabs one at a time to decide what, if anything, to change for a Quick Start."},
+        {t:"One link per tab",b:"You go through the tabs one at a time to decide what, if anything, to change for a Quick Start."},
         {t:"Everything here is also in the Workbook",b:"The Workbook lists the change for each tab so you can follow along.",k:"tip"}],
   pins:[{x:36,y:4.5},{x:17,y:53}],
-  say:"Go to Administration, then Workspace Manager, scroll to the Items workspace and expand it. Every row is a tab we can configure. We will walk them in order and say, for each one, what changes for a Quick Start and what does not.",
-  note:"The rule of thumb from the Workspace Manager Quick Start Guide: out of the box, recommended changes, and do not change. Anything that is not on the recommended list stays as it is."},
+  say:"Go to Administration, then Workspace Manager, scroll to the Items workspace and expand it. Every row is a tab you can configure. You will walk them in order and decide, for each, what changes and what stays.",
+  note:"Rule of thumb from the Workspace Manager Quick Start Guide: out of the box, recommended changes, and do not change. Anything not on the recommended list stays as it is."},
  {kind:"step",step:3,kick:"Out of the box · workspace settings",h2:"Workspace settings: rename if you must, never retype",img:"qs_wsset",
   path:["Items","Workspace Settings"],
-  cals:[{t:"Workspace name",b:"This is the out-of-the-box name. You can change it to match the customer’s own term."},
+  cals:[{t:"Workspace name",b:"This is the out-of-the-box name. You can change it to match your own term."},
         {t:"Description",b:"Add a description if it helps. It is optional."},
-        {t:"Do not change the workspace type",b:"For a Quick Start leave this as Revision Controlled Workspace. Changing the type needs a more advanced implementation.",k:"warn"}],
+        {t:"Do not change the workspace type",b:"For a Quick Start leave this as Revision Controlled Workspace. Changing the type needs a more advanced setup.",k:"warn"}],
   pins:[{x:38,y:28},{x:50,y:52},{x:17,y:71}],
-  say:"Workspace settings. The name is the one thing people notice—rename it if the customer calls items something else. Add a description if you like. But leave the workspace type alone: it decides how revisions and lifecycle work, and changing it takes you out of Quick Start territory.",
-  note:"If a customer insists on a different type, stop and treat it as a Phase 2 conversation."},
+  say:"Workspace settings. The name is what people notice—rename it if you call items something else. Add a description if you like. But leave the workspace type alone: it decides how revisions and lifecycle work, and changing it takes you beyond a Quick Start."},
  {kind:"step",step:3,kick:"Out of the box · item details",h2:"Item details: the layout every item shares",img:"qs_itemdet",
   path:["Items","Item Details Tab"],
-  cals:[{t:"Basic section",b:"Number, title, description, type and the other core fields. This is the out-of-the-box layout; the Workbook lists any fields to add or rename for this customer."},
+  cals:[{t:"Basic section",b:"Number, title, description, type and the other core fields. This is the out-of-the-box layout; the Workbook lists any fields to add or rename."},
         {t:"Leave PDM data alone",b:"Do not address the PDM Data section for a Quick Start.",k:"warn"}],
   pins:[{x:34,y:19.5},{x:30,y:52}],
-  say:"The item details layout is where fields and sections live. Walk the Basic section, then point at the PDM Data matrices and say we are not touching them in this Quick Start.",
-  note:"The source slide says only “the following can be updated” and refers to the Workbook. Check the Workbook list before you present."},
+  say:"The item details layout is where fields and sections live. Look through the Basic section, then note the PDM Data matrices—you are not touching those in this Quick Start."},
  {kind:"step",step:3,kick:"Out of the box · descriptor",h2:"Descriptor: number and title name every record",img:"qs_desc",
   path:["Items","Workspace Descriptor"],
   cals:[{t:"Descriptor fields",b:"Out of the box the descriptor is Number plus Title. Up to four fields can be used."},
-        {t:"To confirm",b:"The source slide leaves what to change or leave here open. Decide the rule before you present.",k:"q"}],
+        {t:"To confirm",b:"What to change or leave here is still open. Add the rule before you publish.",k:"q"}],
   pins:[{x:46,y:50},{x:46,y:70}],
   say:"The descriptor decides how every item is named across the product—in lists, in links, in the BOM. Out of the box that is the number and the title, which works for nearly everyone."},
  {kind:"step",step:3,kick:"Out of the box · grid tab",h2:"Grid tab: manufacturer and cost columns",img:"qs_grid",
   path:["Items","Grid Tab"],
   cals:[{t:"Grid fields",b:"Manufacturer part number, manufacturer, vendor, preferred, unit cost, lead time and more. This is the out-of-the-box set."},
-        {t:"To confirm",b:"The source slide leaves what to update here open. Add a rule before you present.",k:"q"}],
+        {t:"To confirm",b:"What to update here is still open. Add the rule before you publish.",k:"q"}],
   pins:[{x:45,y:50},{x:13,y:13}],
-  say:"The grid tab holds the sourcing-style columns you see on an item. Show the out-of-the-box list, then tell the room what, if anything, you change for this customer."},
+  say:"The grid tab holds the sourcing-style columns you see on an item. Look at the out-of-the-box list and note anything your own items need."},
  {kind:"step",step:3,kick:"Out of the box · managed items",h2:"Managed items: empty out of the box",img:"qs_mgd",
   path:["Items","Managed Items Tab"],
   cals:[{t:"No fields yet",b:"The managed items layout starts empty. Nothing needs adding for a Quick Start."},
-        {t:"To confirm",b:"The source slide leaves the rule open. Confirm before you present.",k:"q"}],
+        {t:"To confirm",b:"The rule here is still open. Confirm before you publish.",k:"q"}],
   pins:[{x:66,y:43}],
   say:"Managed items has no fields yet. That is fine—it matters once change orders start affecting items, which is the next chapter."},
  {kind:"step",step:3,kick:"Out of the box · bill of materials",h2:"BOM layout: fields and views",img:"qs_bom",
   path:["Items","Bill of Materials Tab"],
-  cals:[{t:"BOM fields",b:"The columns that can appear in a BOM. You can update these based on the customer’s BOM requirements."},
+  cals:[{t:"BOM fields",b:"The columns that can appear in a BOM. You can update these based on your own BOM requirements."},
         {t:"BOM views",b:"Basic, AML Summary, Compliance and others ship out of the box, with Basic as the default."},
-        {t:"Do not create new views",b:"For a Quick Start, creating new BOM views is not recommended. Park it for Phase 2.",k:"warn"}],
+        {t:"Do not create new views",b:"For a Quick Start, creating new BOM views is not recommended. Save it for later.",k:"warn"}],
   pins:[{x:11,y:36},{x:55,y:24},{x:31,y:19}],
-  say:"This is the BOM layout. Fields on the left, views on the right. Work with the customer’s BOM requirements to update the fields. Resist adding views—the out-of-the-box set is enough to prove the value.",
-  note:"New BOM views are a classic scope-creep trap. Say once that views are a Phase 2 topic and move on."},
+  say:"This is the BOM layout. Fields on the left, views on the right. Update the fields to match your own BOM requirements. Resist adding views—the out-of-the-box set is enough to prove the value.",
+  note:"New BOM views are an easy way to stall a first rollout. Add them after you go live."},
  {kind:"step",step:3,kick:"Out of the box · sourcing",h2:"Sourcing: nothing to change",img:"qs_src",
   path:["Items","Sourcing Tab"],
-  cals:[{t:"No updates",b:"There are no updates to this tab for the Quick Start implementation."}],
+  cals:[{t:"No updates",b:"There are no updates to this tab for the Quick Start."}],
   pins:[{x:65,y:43}],
-  say:"Sourcing. Nothing to do. Look at it, say so, and move on."},
+  say:"Sourcing. Nothing to do. Look at it and move on."},
  {kind:"step",step:3,kick:"Out of the box · relationships",h2:"Workspace relationships: what each tab can pick",img:"qs_rel",
   path:["Items","Workspace Relationships"],
   cals:[{t:"Relationships tab",b:"Allows users to choose items from the Requirements workspace."},
         {t:"Bill of Materials tab",b:"Allows users to choose items from the Items workspace—this is what builds the BOM structure."},
-        {t:"To confirm",b:"The source slide leaves what to update or leave here open. Confirm before you present.",k:"q"}],
+        {t:"To confirm",b:"What to update or leave here is still open. Confirm before you publish.",k:"q"}],
   pins:[{x:84,y:52},{x:84,y:62}],
   say:"This page controls what each tab lets a user pick. The BOM tab picks from the Items workspace, which is how a BOM gets its children. The relationships tab can reach Requirements."},
  {kind:"step",step:3,kick:"Out of the box · tab names",h2:"Tab names: rename and reorder",img:"qs_tabs",
   path:["Items","Tab Names"],
   cals:[{t:"Rename or reorder the tabs",b:"Drag the tabs to change their order. The Item Details tab can be renamed but not moved."},
-        {t:"To confirm",b:"The source slide leaves the update rule open. Confirm before you present.",k:"q"}],
+        {t:"To confirm",b:"The update rule here is still open. Confirm before you publish.",k:"q"}],
   pins:[{x:2,y:52}],
-  say:"Tab names. Use the customer’s vocabulary if there is a strong preference, and reorder if it helps them find things."},
+  say:"Tab names. Use your own vocabulary if you have a strong preference, and reorder if it helps people find things."},
  {kind:"step",step:3,kick:"Out of the box · print views",h2:"Print views: there are none out of the box",img:"qs_pv",
   path:["Items","Print Views"],
   cals:[{t:"Empty by default",b:"No print views ship out of the box."},
-        {t:"Teach, do not build",b:"Offer to set up one or two, and teach the customer how to create their own. Do not build an exhaustive list for them.",k:"tip"}],
+        {t:"Start small",b:"Set up one or two you need today and learn how to create more later. You do not need an exhaustive list.",k:"tip"}],
   pins:[{x:22,y:45}],
-  say:"Print views are empty. Create a couple if they help the customer, and then show them how to make their own. Do not become the person who builds every print view."},
+  say:"Print views are empty. Create a couple if they help, and learn how to make more when you need them. You do not have to build them all now."},
  {kind:"step",step:3,kick:"Out of the box · advanced print views",h2:"Advanced print views: not for a Quick Start",img:"qs_apv",
   path:["Items","Advanced Print Views"],
   cals:[{t:"Do not set any up",b:"There are no out-of-the-box advanced print views, and none should be set up for a Quick Start.",k:"warn"}],
   pins:[{x:19,y:52}],
-  say:"Advanced print views are a later phase. Show the page, and leave it empty."},
+  say:"Advanced print views are for later. Look at the page, and leave it empty."},
  {kind:"step",step:3,kick:"Out of the box · behaviors",h2:"Behaviors: scripts that run on item events",img:"qs_beh",
   path:["Items","Behaviors"],
   cals:[{t:"Scripts at create and edit",b:"The Items onCreate onEdit script runs whenever an item is created or its details change."},
         {t:"On-demand script",b:"Update Procurement and AML Summary can be run by a user on request."},
-        {t:"To confirm",b:"The source slide leaves what to update or leave here open. Treat these as do-not-change for a Quick Start until confirmed.",k:"q"}],
+        {t:"To confirm",b:"What to update or leave here is still open. Treat these as do-not-change for a Quick Start until confirmed.",k:"q"}],
   pins:[{x:57,y:44.5},{x:57,y:65.5}],
   say:"Behaviors are scripts tied to events. You are not writing any in this Quick Start—just know they are there and that the out-of-the-box ones do real work."},
  {kind:"big",step:3,kick:"Your turn",h1:"Items & BOM workspace management",
-  sub:"Open your default or training tenant and use the Workbook content to review and update the workspaces.",
+  sub:"Open your training tenant and use the Workbook to review and update the workspaces.",
   mark:qsExercise("Review and update the Items workspace","Workbook · reviewing and updating the workspaces"),
-  say:"Open the training tenant. Work through the Workbook content for the Items workspace, tab by tab.",
-  note:"Give the room time here and walk around. The common mistake is changing the workspace type."},
+  say:"Open your training tenant. Work through the Workbook content for the Items workspace, tab by tab.",
+  note:"The most common mistake is changing the workspace type. Leave it."},
 
  {kind:"fig",fig:"qsarc1",step:4,kick:"Configuring the PLM tenant",h1:"Move two: add users<br>and assign them to groups",
   say:"Second move. Who is allowed to see and change the BOM? That is users, groups and roles."},
  {kind:"step",step:4,kick:"Users",h2:"Add each user and fill in every field",img:"qs_user",
   path:["Administration","Users","Add user"],
-  cals:[{t:"Fill in all fields",b:"Each user is added here. Complete every field, including the required ones."},
-        {t:"Assign the license type",b:"Choose the license from the types the customer bought, based on each user’s role.",k:"tip"}],
+  cals:[{t:"Fill in all fields",b:"Add each user here. Complete every field, including the required ones."},
+        {t:"Assign the license type",b:"Choose the license from the types you bought, based on each user’s role.",k:"tip"}],
   pins:[{x:35,y:27},{x:40,y:49}],
-  say:"Add each team member here. First name, last name, email, and then the license type, which depends on what the customer bought and what the person does.",
+  say:"Add each team member here. First name, last name, email, and then the license type, which depends on what you bought and what the person does.",
   note:"Match license type to role: authors need a Professional license, reviewers and approvers can use a Participant license."},
  {kind:"step",step:4,kick:"Roles",h2:"Roles ship ready-made",img:"qs_roles",
   path:["Administration","Users","Roles"],
   cals:[{t:"Roles already exist",b:"The standard tenant has many roles with standard permissions, assigned to the various groups."},
-        {t:"Review, do not rebuild",b:"A Phase 1 Quick Start does not need changes here, but it is important to review the list.",k:"tip"}],
+        {t:"Review, do not rebuild",b:"A first Quick Start does not need changes here, but it is important to review the list.",k:"tip"}],
   pins:[{x:13,y:4},{x:50,y:23}],
-  say:"The standard tenant already has roles, each with permissions on a workspace, and they are already attached to groups. For Phase 1 you read the list, you do not edit it."},
+  say:"The standard tenant already has roles, each with permissions on a workspace, and they are already attached to groups. For now you read the list; you do not edit it."},
  {kind:"step",step:4,kick:"Groups",h2:"Groups bundle the roles",img:"qs_groups",
   path:["Administration","Users","Groups"],
   cals:[{t:"Engineering",b:"The group for engineering and design users."},
-        {t:"Importer",b:"Import access to workspaces. The person who imports the BOMs belongs here.",k:"tip"}],
+        {t:"Importer",b:"Import access to workspaces. The person who imports your BOMs belongs here.",k:"tip"}],
   pins:[{x:22,y:55.4},{x:22,y:77.6}],
-  say:"Groups are where roles are collected. Out of the box there are plenty. The two that matter for this module are Engineering and Importer. Again, review them rather than change them."},
+  say:"Groups are where roles are collected. Out of the box there are plenty. The two that matter for this chapter are Engineering and Importer. Again, review them rather than change them."},
  {kind:"step",step:4,kick:"Add users to groups",h2:"Reach a user’s groups from the user list",img:"qs_users",
   path:["Administration","Users"],
   cals:[{t:"Open the Groups link",b:"From the user list, the Groups link beside a user opens the page for managing that user’s groups."}],
@@ -1869,28 +1880,28 @@ more:[
         {t:"Groups the user belongs to",b:"The right-hand list shows what the user has now.",k:"tip"}],
   pins:[{x:20,y:58},{x:51.5,y:60},{x:80,y:60}],
   say:"All the groups are on the left. Pick one, press the arrow, and it moves to the right-hand side, which is what this person belongs to."},
- {kind:"fig",fig:"qsroles",step:4,kick:"Who you need",h1:"Recommended roles and licenses<br>for an Items & BOMs Quick Start",
-  say:"These are the roles to name. A project lead, an engineer or designer, a PLM admin, and an importer, each needing one Author license. Everyone else is an Others role—managers or procurement who only need reports or approve something—who can use a Participant license.",
-  note:"One person can hold several roles. The importer can also be an engineer, and the project lead can be the PLM admin. That is perfectly fine, but every role needs a named person, and a person with several roles still needs only one license."},
+ {kind:"fig",fig:"qsroles",step:4,kick:"Who you need",h1:"Recommended roles and licenses<br>for Items & BOMs",
+  say:"These are the roles to name: a project lead, an engineer or designer, a PLM admin, and an importer, each needing one Author license. Everyone else is an Others role—managers or procurement who only need reports or approve something—and can use a Participant license.",
+  note:"One person can hold several roles. The importer can also be an engineer, and the project lead can be the PLM admin. That is fine, but every role needs a named person, and a person with several roles still needs only one license."},
  {kind:"fig",fig:"qsgroups",step:4,kick:"Who goes where",h1:"Assign users to these groups",
   say:"And here is where each role lands. The project lead goes in Admin Group and Engineering. Engineers go in Engineering. The PLM admin goes in Admin Group, Administration and Engineering. The importer goes in Engineering and Importer. Others go in Manufacturing.",
-  note:"These are the recommended assignments for Items & BOMs only. They are a starting point, not a security model."},
+  note:"These are recommended starting assignments for Items & BOMs, not a full security model."},
  {kind:"big",step:4,kick:"Your turn",h1:"Items & BOM users, groups and roles",
-  sub:"Open your default or training tenant and use the Workbook content to assign users and groups.",
+  sub:"Open your training tenant and use the Workbook to assign users and groups.",
   mark:qsExercise("Assign users and groups","Workbook · assigning users and groups"),
-  say:"Open the training tenant and follow the Workbook to add the users and put them in the right groups."},
+  say:"Open your training tenant and follow the Workbook to add users and put them in the right groups."},
 
- {kind:"fig",fig:"qsarc2",step:5,kick:"Configuring the PLM tenant",h1:"Move three:<br>import the customer’s BOMs",
-  say:"Third move. We bring the customer’s own data into the tenant."},
- {kind:"fig",fig:"qsarc2",step:5,kick:"Import the BOM",h1:"Importing is a cornerstone<br>of the implementation",
-  sub:"The nuances of importing a BOM belong to Implementer training. Call on that knowledge for the next exercise.",
+ {kind:"fig",fig:"qsarc2",step:5,kick:"Configuring the PLM tenant",h1:"Move three:<br>import your BOMs",
+  say:"Third move. You bring your own data into the tenant."},
+ {kind:"fig",fig:"qsarc2",step:5,kick:"Import the BOM",h1:"Importing is a cornerstone<br>of the setup",
+  sub:"Importing a BOM has a few subtleties. The Help guide has a high-level overview to read first.",
   path:["help.autodesk.com","Essential skills","Importing a BOM"],
-  say:"Importing a BOM is the cornerstone of a successful implementation. The nuances are covered in the Implementer training for PLM Specialization, and you will need them for this exercise. As a refresher, the Fusion Manage Help guide has a high-level overview under Essential Skills, Importing a BOM.",
-  note:"The Help videos for importing are about ten years old and still branded PLM 360. Check the steps against the current product before you rely on them. Video screens for the import walkthrough are not in this module yet."},
+  say:"Importing a BOM is the cornerstone of getting value fast, and it has a few subtleties. Before you start, read the high-level overview in the Fusion Manage Help guide, under Essential Skills, Importing a BOM.",
+  note:"Check the steps in older Help videos against the current product before relying on them. Video walkthroughs for the import are not in this chapter yet."},
  {kind:"fig",fig:"qsimport",step:5,kick:"Import the BOM",h1:"Which BOMs, which fields",
-  sub:"Not every BOM belongs in a Quick Start. Decide this during alignment.",
-  say:"Import two kinds of BOM: the work in progress now, and the BOMs in scope for roughly the next twelve months. Import the fields you can find on a drawing—description, part number, manufacturer part number, material, quantity. And if the customer has Vault, a link back to the item in Vault is high value.",
-  note:"The importer you identified at the customer should be trained during this step so they can import additional BOMs once the Quick Start is done."},
+  sub:"Not every BOM belongs in a first import. Decide up front.",
+  say:"Import two kinds of BOM: the work in progress now, and the BOMs in scope for roughly the next twelve months. Import the fields you can find on a drawing—description, part number, manufacturer part number, material, quantity. And if you use Vault, a link back to the item in Vault is high value.",
+  note:"The person with the Importer role can add more BOMs after the Quick Start is done."},
  {kind:"big",step:5,kick:"Your turn",h1:"Import the example BOM",
   sub:"Use the example BOM from the Workbook, or a blank import template if you bring your own.",
   mark:qsExercise("Import the example BOM","Example BOM and Import BOM Template are in the Workbook"),
@@ -1902,21 +1913,21 @@ more:[
  {kind:"step",step:6,kick:"BOM views",h2:"Use the default BOM views",img:"qs_views",
   path:["Items","Bill of Materials","Views"],
   cals:[{t:"Default BOM views pull-down",b:"The relevant views are already here. For a Quick Start the default BOM views are used."},
-        {t:"Edit the default view",b:"Review and edit the default BOM view to reflect any customer-specific fields you added."},
-        {t:"New views come later",b:"Creating new BOM views belongs in Phase 2 or a follow-up after go-live.",k:"warn"}],
+        {t:"Edit the default view",b:"Review and edit the default BOM view to show any fields you added."},
+        {t:"New views come later",b:"Creating new BOM views belongs in a later phase, after you go live.",k:"warn"}],
   pins:[{x:72,y:30.5},{x:79,y:43.5}],
   say:"Open any BOM and the Views pull-down lists what ships with the tenant. For this Quick Start those are what you use. If you added fields earlier, make sure the default view shows them.",
-  note:"Customer-specific fields only appear in a view if somebody adds them to it. This is the step people forget."},
+  note:"Fields you add only appear in a view if somebody adds them to it. This is the step people forget."},
  {kind:"step",step:6,kick:"Reports",h2:"Put two default charts on My Outstanding Work",img:"qs_chart",
   path:["My Outstanding Work","Charts","Add charts"],
   cals:[{t:"Documents by lifecycle state",b:"Add the default report for documents."},
-        {t:"Items per lifecycle",b:"Add the default report for items. Show the customer how to add more charts later.",k:"tip"}],
+        {t:"Items per lifecycle",b:"Add the default report for items. You can add more charts later the same way.",k:"tip"}],
   pins:[{x:94,y:22},{x:94,y:34}],
-  say:"On the home page, open the chart picker. For the Quick Start, switch on the two default charts: documents by lifecycle state, and items per lifecycle. Then show the customer how to add more themselves.",
-  note:"Use only default reports in a Quick Start. Review the underlying report if the customer added fields."},
+  say:"On the home page, open the chart picker. For the Quick Start, switch on the two default charts: documents by lifecycle state, and items per lifecycle. You can add more whenever you like.",
+  note:"Use only default reports in a Quick Start. Review the underlying report if you added fields."},
  {kind:"step",step:6,kick:"Reports",h2:"A report shows as a chart if it has a chart icon",img:"qs_rpt",
   path:["Reports","Report list"],
-  cals:[{t:"The chart icon",b:"Reports with a graphical element appear in the My Outstanding Work chart pull-down. Show the customer which reports qualify."}],
+  cals:[{t:"The chart icon",b:"Reports with a graphical element appear in the My Outstanding Work chart pull-down."}],
   pins:[{x:4.5,y:38}],
   say:"Not every report can be a chart. The ones with the small bar icon are eligible—that is what feeds the pull-down on the home page.",
   note:"Owner names are hidden in this screenshot."},
@@ -1926,35 +1937,35 @@ more:[
   say:"Open the Workbook and complete the BOM views and reports lessons."},
  {kind:"fig",fig:"qsarc4",step:6,kick:"Configuring the PLM tenant",h1:"Complete!",
   sub:"Workspaces reviewed, users added, BOMs imported, views and reports set. Now prove it.",
-  say:"That is the configuration done. Workspaces reviewed, users and groups in place, the customer’s BOM imported, views and reports ready. Next we confirm it works."},
+  say:"That is the configuration done. Workspaces reviewed, users and groups in place, your BOM imported, views and reports ready. Next you confirm it works."},
 
- {kind:"fig",fig:"qsframeUAT",step:7,kick:"Back to the framework",h1:"Step 03:<br>user acceptance testing",
-  sub:"Now that the tenant is set up, the users added and the data imported, we need confirmation of success.",
-  say:"Now that we have the tenant set up, the users added and the customer’s data imported, we need confirmation that it works."},
- {kind:"fig",fig:"qsuat",step:7,kick:"UAT",h1:"Iterate on test cases<br>until the customer signs off",
-  say:"We agree the use cases or test stories up front. As we walk each one, we record feedback—good, bad, gaps, clunky. We change what the Quick Start scope allows. Anything it does not cover becomes the beginning of a future phase.",
-  note:"This is a critical step. It gets approval on the success of the Quick Start and prevents scope creep. Keep a visible backlog of what was parked."},
- {kind:"fig",fig:"qsverify",step:7,kick:"Items & BOMs UAT",h1:"Implementation success<br>is two checks",
-  say:"Because this is a foundational Quick Start, testing is simple. Check the BOM came in correctly, with its metadata. Then check the BOM views and charts are right. Later modules need a more thorough test plan."},
+ {kind:"fig",fig:"qsframeUAT",step:7,kick:"Back to the framework",h1:"Step 02:<br>test it",
+  sub:"The tenant is set up, the users are added and your data is in. Now confirm it works the way you need.",
+  say:"The tenant is set up, your users are added and your data is imported. Now you confirm it works the way you need—user acceptance testing, or UAT."},
+ {kind:"fig",fig:"qsuat",step:7,kick:"UAT",h1:"Iterate on test cases<br>until you are happy",
+  say:"Agree your use cases or test stories first. As you walk through each one, note what is good, bad, missing or clunky. Change what this Quick Start allows. Anything it does not cover goes on a list for a future phase.",
+  note:"Keep a visible list of what you parked. It stops the first rollout growing into a big project."},
+ {kind:"fig",fig:"qsverify",step:7,kick:"Items & BOMs UAT",h1:"Success is two checks",
+  say:"Because this is a foundational Quick Start, testing is simple. Check the BOM came in correctly, with its metadata. Then check the BOM views and charts are right. Later modules deserve a fuller test plan."},
  {kind:"step",step:7,kick:"Verify",h2:"Check the BOM and its metadata",img:"qs_bomtab",
   path:["Items","EMBER Printer","Bill of Materials"],
   cals:[{t:"The structure came in",b:"Parent and children are all there, with levels, numbers and descriptors."},
-        {t:"The metadata came in",b:"Revision, lifecycle and attachments show up as columns. Check every column the customer asked for."},
+        {t:"The metadata came in",b:"Revision, lifecycle and attachments show up as columns. Check every column you asked for."},
         {t:"The right view",b:"The Basic view is the default for the Quick Start.",k:"tip"}],
   pins:[{x:28,y:48},{x:96.5,y:44},{x:72,y:31}],
-  say:"Open the imported BOM. Is the whole structure there? Do the columns the customer cares about hold the right values? And are they looking at the view you set up for them?",
+  say:"Open the imported BOM. Is the whole structure there? Do the columns you care about hold the right values? And are you looking at the view you set up?",
   note:"The screenshot shows sample data from a demo tenant."},
  {kind:"big",step:7,kick:"Your turn",h1:"Test the use cases",
   sub:"Open the Workbook and complete the lesson that tests the use cases.",
   mark:qsExercise("Test the use cases","Workbook · testing the use cases"),
   say:"Open the Workbook and work through the use-case test lesson. Note what works and what does not."},
- {kind:"big",kick:"Course completion",h1:"You can run this Quick Start<br>from end to end.",
-  sub:"Use the Workbook as your guide for the next Items & BOMs implementation. The next step is the Change Management Quick Start—the two together drive adoption.",
-  say:"Congratulations. You have configured the workspaces, set up users, imported a BOM, prepared its views and reports, and tested it. The Workbook is yours for the next implementation. And the next step for the customer is Change Management—so that is exactly where we go next.",
-  note:"Customer adoption depends on pairing the two. Do not let the customer stop after Items & BOMs."}
+ {kind:"big",kick:"Chapter complete",h1:"You have your items and BOMs<br>working in Fusion Manage.",
+  sub:"Keep the Workbook as your guide for the next BOMs you bring in. Next up: change management—so changes to those BOMs are approved and tracked.",
+  say:"Well done. You have configured the workspaces, set up users, imported a BOM, prepared its views and reports, and tested it. Keep the Workbook for the next import. The next step is change management, so that every change to a BOM is requested, approved and recorded—and that is exactly where we go next.",
+  note:"Items & BOMs and change management are designed to be used together. Do not stop after this chapter."}
 ]},
 
-{id:"change",nav:"Change management",lit:["why","two","map","access","connect","items","change"],steps:CMSTEPS,screens:[
+{id:"change",nav:"Change management",badge:"Both editions",lit:["why","two","map","access","connect","items","change"],steps:CMSTEPS,screens:[
  {kind:"sect",t:"CHANGE MANAGEMENT",sub:"The shop floor asks, engineering decides, the part changes — and nothing is typed twice."},
  {kind:"fig",fig:"mapChange",kick:"Where we are",h1:"Change management.",
   say:"Back to the map for five seconds. This is the group of workspaces we are about to live inside — change requests, change orders, change tasks and the approval templates that drive them.",
@@ -2208,7 +2219,7 @@ more:[
   notes:[["CCB rounds","The counter increases each time the record re-enters that state — evidence of how contested a change was."],
          ["Confirmers can only confirm","Defined in the change approval template at the very start.","q"]]}
 ]},
-{id:"quality",nav:"Quality",lit:["why","two","map","access","connect","items","change","quality"],steps:QSTEPS,screens:[
+{id:"quality",nav:"Quality",badge:"Both editions",lit:["why","two","map","access","connect","items","change","quality"],steps:QSTEPS,screens:[
  {kind:"sect",t:"QUALITY",sub:"A number out of tolerance, and the part changes. Inspection → non-conformance → CAPA → change."},
  {kind:"fig",fig:"qflow",kick:"The flow",h1:"Quality is where<br>change comes from.",step:0,
   say:"You have already run the second half of this. A change request did not appear from nowhere — something failed an inspection. This module is the front of that chain: write the plan, define what gets measured, run the inspection, and when a measurement fails, follow the records the system opens for you.",
@@ -2473,7 +2484,7 @@ more:[
  {h:"The hand-off into change management",imgs:["q2_0209","q2_0214","q2_0216"],
   notes:[["Same text, new record","The change request description is the CAPA problem statement, carried forward automatically."]]}
 ]},
-{id:"ideas",nav:"Ideas",lit:["why","two","map","access","connect","items","change","quality","ideas"],steps:IDSTEPS,screens:[
+{id:"ideas",nav:"Ideas",badge:"Both editions",lit:["why","two","map","access","connect","items","change","quality","ideas"],steps:IDSTEPS,screens:[
  {kind:"sect",t:"IDEAS",sub:"An idea is a record, not a chat message. Capture, assess, vote, decide, implement."},
 
  {kind:"fig",fig:"ideaflow",kick:"The flow",h1:"An idea is a record,<br>not a chat message.",step:0,
@@ -2622,7 +2633,7 @@ more:[
   notes:[["This is the Advanced section now","The workspace anatomy, the workflow editor, the transition slots and the script that produced the refusal all moved to Advanced. Switch the header button to see them.","tip"],
          ["Why they moved","A room learning the product does not need to read JavaScript to trust it. Show them the documentation route first; show the code only to an audience that will configure the tenant."]]}
 ]},
-{id:"docs",nav:"Documents",lit:["why","two","map","access","connect","items","change","quality","ideas","docs"],steps:DSTEPS,screens:[
+{id:"docs",nav:"Documents",badge:"Both editions",lit:["why","two","map","access","connect","items","change","quality","ideas","docs"],steps:DSTEPS,screens:[
  {kind:"sect",t:"DOCUMENTS",sub:"A drawing is a contract, not a file on a desktop. Revision control for the paperwork."},
 
  {kind:"fig",fig:"docflow",kick:"The flow",h1:"A drawing is a contract,<br>not a file on a desktop.",step:0,
@@ -2969,9 +2980,9 @@ function coverHTML(){
   return `<div id="cover">${figNet()}
     <div class="cvlogo">${lg?`<img src="${lg}" alt="Autodesk">`:`<span class="wm">AUTODESK</span>`}</div>
     <div class="cvinner">
-    <div class="cvtext"><div class="w">Fusion Manage · Implementation series</div>
-      <h1>PLM Quick Start<br>Items &amp; BOMs</h1>
-      <div class="host"><span>Quick Start series</span><b>FY26</b></div></div>
+    <div class="cvtext"><div class="w">Autodesk Fusion Manage</div>
+      <h1>PLM<br>Quick Start</h1>
+      <div class="sub" style="margin-top:18px">Your fast path to value: set it up, check it works, and build from there.</div></div>
   </div></div>`;}
 function screenHTML(f){
   const sc=f.sc,k=sc.kick?`<div class="kick">${sc.kick}</div>`:'';
@@ -3004,12 +3015,13 @@ function paint(){
   const f=flat[cur];
   document.getElementById('crumb').textContent=f.sec.id==='cover'?'':`${f.sec.nav} — ${f.ci+1}/${f.sec.screens.length}`;
   const vtot=flat.filter(shown).length-1,vidx=flat.slice(0,cur+1).filter(shown).length-1;
+  {const eb=document.getElementById('edb');eb.textContent=f.sec.badge||'';eb.dataset.k=({'Standalone':'s','Fusion connected':'c','Both editions':'b'})[f.sec.badge]||'';eb.style.display=f.sec.badge?'inline-block':'none';}
   pgEl.innerHTML=f.sec.id==='cover'?'':`<b>${vidx}</b> / ${vtot}`;
   const lit=new Set(f.sec.lit||[]);
   document.querySelectorAll('.tn').forEach(t=>t.classList.toggle('lit',lit.has(t.dataset.k)));
   sideEl.querySelectorAll('.m').forEach(m=>m.classList.toggle('cur',m.dataset.sec===f.sec.id));
   presEl.innerHTML=(f.sc.say?`<div class="lbl">Say</div><p>${f.sc.say}</p>`:'')
-    +(f.sc.note?`<div class="lbl">Facilitator</div><p>${f.sc.note}</p>`:'')
+    +(f.sc.note?`<div class="lbl">${f.sec.notelabel||"Facilitator"}</div><p>${f.sc.note}</p>`:'')
     +(!f.sc.say&&!f.sc.note?`<div class="lbl">Notes</div><p style="color:#555">—</p>`:'');
   applyReveal();stopTimer();igniteScreen();
   if(f.sc.kind==='clock'){base=f.sc.secs;left=base;showClock();wireTimer();}
@@ -3046,12 +3058,12 @@ DECK.filter(s=>s.id!=='cover').forEach(sec=>{
       <h3>${(sc.h2||sc.h1||sc.t||'').replace(/<br>/g,' ')}</h3>
       ${sc.sub?`<p style="color:#D5D5CB;font-size:15px;line-height:1.6;margin-bottom:11px">${sc.sub}</p>`:''}${body}
       ${sc.say?`<div class="enote"><b>Say</b><p>${sc.say}</p></div>`:''}
-      ${sc.note?`<div class="enote"><b>Facilitator</b><p>${sc.note}</p></div>`:''}</div>`;}).join('');
+      ${sc.note?`<div class="enote"><b>${sec.notelabel||"Facilitator"}</b><p>${sc.note}</p></div>`:''}</div>`;}).join('');
   const first=flat.findIndex(f=>f.sec.id===sec.id);
   (sec.more||[]).forEach(m=>{inner+=`<div class="ecard"><button class="jump" data-go="${first}">Present this section →</button>
     <h3>${m.h}</h3>${m.imgs.map(k=>`<img src="${I(k)}" alt="">`).join('')}
     ${(m.notes||[]).map(n=>`<div class="enote ${n[2]||''}"><b>${n[0]}</b><p>${n[1]}</p></div>`).join('')}</div>`;});
-  ebody.insertAdjacentHTML('beforeend',`<div class="esec" id="e-${sec.id}"><div class="meta">${sec.nav}</div>
+  ebody.insertAdjacentHTML('beforeend',`<div class="esec" id="e-${sec.id}"><div class="meta">${sec.nav}${sec.badge?" · "+sec.badge:""}</div>
     <h2>${(sec.screens[0].h1||sec.nav).replace(/<br>/g,' ')}</h2>${inner}</div>`);});
 ebody.querySelectorAll('.jump').forEach(b=>b.onclick=()=>{
   cur=+b.dataset.go;reveal=0;present=true;document.body.classList.remove('explore');
